@@ -1,0 +1,35 @@
+# SIGAP-Gambut: broker MQTT + backend/dashboard dalam satu VPS.
+#   cd deploy && docker compose up -d --build
+# Dashboard: http://IP-VPS:8000   ·   MQTT: IP-VPS:1883   ·   MQTT WebSocket: ws://IP-VPS:9001
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    restart: unless-stopped
+    ports:
+      - "1883:1883"   # penerima LoRa (ESP32) publish ke sini
+      - "9001:9001"   # WebSocket untuk dashboard (opsional)
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./mosquitto/passwd:/mosquitto/config/passwd:ro
+      - mosquitto-data:/mosquitto/data
+
+  api:
+    build:
+      context: ..
+      dockerfile: server/Dockerfile
+    restart: unless-stopped
+    depends_on: [mosquitto]
+    ports:
+      - "8000:8000"
+    environment:
+      MQTT_HOST: mosquitto
+      MQTT_USER: ${MQTT_USER:-sigap}
+      MQTT_PASS: ${MQTT_PASS:-ganti-kata-sandi}
+      INGEST_TOKEN: ${INGEST_TOKEN:-}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+    volumes:
+      - api-data:/data
+
+volumes:
+  mosquitto-data:
+  api-data:

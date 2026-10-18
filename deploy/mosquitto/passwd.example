@@ -1,0 +1,5 @@
+# Buat file passwd sungguhan (jangan di-commit):
+#   docker run --rm -v "$PWD/deploy/mosquitto:/m" eclipse-mosquitto:2 \
+#     mosquitto_passwd -c -b /m/passwd sigap KATA_SANDI_ANDA
+# Tambah pengguna lain (mis. akun baca-saja untuk dashboard):
+#   ... mosquitto_passwd -b /m/passwd dashboard KATA_SANDI_LAIN

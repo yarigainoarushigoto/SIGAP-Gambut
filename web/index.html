@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIGAP-Gambut — Monitoring Risiko Kebakaran Gambut</title>
+  <meta name="description" content="Dashboard pemantauan real-time node sensor IoT lahan gambut: tinggi muka air, kelembapan gambut, curah hujan, suhu, dan indeks PFVI.">
+  <meta name="theme-color" content="#173f2c">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script>
+    // terapkan tema tersimpan sebelum render (hindari kedip)
+    try { const t = localStorage.getItem("sigap.theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="currentColor" opacity=".14"/>
+          <path d="M16 5c3.2 4.1 6.5 7.6 6.5 12.1A6.5 6.5 0 0 1 9.5 17.1c0-2.3 1-4.3 2.4-6 .3 1.9 1.4 3.2 2.8 3.6C14.3 11.2 14.9 8 16 5Z" fill="#f2b84b"/>
+          <path d="M5 23.5c3 0 3-1.6 5.5-1.6s2.5 1.6 5.5 1.6 3-1.6 5.5-1.6 2.5 1.6 5.5 1.6" fill="none" stroke="#7cc6ff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <div class="brand-title">SIGAP-Gambut</div>
+          <div class="brand-sub" id="siteLine">Memuat…</div>
+        </div>
+      </div>
+      <div class="topbar-tools">
+        <span class="conn" id="conn" title="Sumber data"><span class="dot"></span><span class="conn-label">Menghubungkan…</span></span>
+        <label class="node-pick" id="nodePickWrap" hidden>
+          <span class="sr-only">Pilih node</span>
+          <select id="nodePick"></select>
+        </label>
+        <button class="icon-btn" id="themeBtn" type="button" title="Ganti tema terang/gelap" aria-label="Ganti tema">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Navigasi utama">
+      <a href="#ringkasan" data-route="ringkasan">Ringkasan</a>
+      <a href="#grafik" data-route="grafik">Grafik Historis</a>
+      <a href="#peta" data-route="peta">Peta Node</a>
+      <a href="#notifikasi" data-route="notifikasi">Notifikasi <span class="badge" id="alertCount" hidden></span></a>
+      <a href="#perangkat" data-route="perangkat">Perangkat &amp; Sistem</a>
+      <a href="#data" data-route="data">Data &amp; Ekspor</a>
+      <a href="#pengaturan" data-route="pengaturan">Pengaturan</a>
+    </nav>
+  </header>
+
+  <div class="demo-strip" id="demoStrip" hidden>
+    Mode demo: data simulasi di browser untuk presentasi, bukan data lapangan. Hubungkan backend di
+    <a href="#pengaturan">Pengaturan</a> untuk data node yang sebenarnya.
+  </div>
+
+  <main id="view" class="container" tabindex="-1"></main>
+
+  <footer class="foot container">
+    <span>SIGAP-Gambut · Lomba Riset Mahasiswa BPDP 2026–2027 · Universitas Negeri Semarang</span>
+    <span>PFVI: Taufik dkk. (2022), peatfr (Mahdiyasa dkk., 2025)</span>
+  </footer>
+
+  <div class="toast-wrap" id="toasts" aria-live="polite"></div>
+
+  <script src="assets/vendor/chart.umd.min.js"></script>
+  <script src="assets/vendor/leaflet/leaflet.js"></script>
+  <script src="assets/vendor/mqtt.min.js"></script>
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

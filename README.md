@@ -73,7 +73,7 @@ python3 -m http.server 8080 -d web
 
 Atau lewat GitHub Pages: Settings → Pages → Source: **Deploy from a branch**, branch `main`,
 folder `/ (root)`. `index.html` di root langsung mengarahkan ke `web/`, dan `.nojekyll` membuat
-file disajikan apa adanya. Hasilnya tayang di `https://<user>.github.io/sigap-gambut/` tiap ada push.
+file disajikan apa adanya. Hasilnya tayang di `https://yarigainoarushigoto.github.io/SIGAP-Gambut/` tiap ada push.
 
 ### Backend lokal (tanpa Docker)
 
